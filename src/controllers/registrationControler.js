@@ -1,4 +1,5 @@
 const User = require('../models/User.model');
+const { sendRegistrationEmail } = require('../services/email.service');
 
 registerUser = async (req, res) =>{
     try{
@@ -12,6 +13,8 @@ registerUser = async (req, res) =>{
             });
             await newUser.save();
             res.status(201).json({message: "User registered successfully"});
+
+            await sendRegistrationEmail(email, name);
         }else{
             res.status(400).json({message: "Email already exists"});
         }       
