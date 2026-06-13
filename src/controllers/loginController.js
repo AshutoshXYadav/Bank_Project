@@ -1,4 +1,6 @@
 const User = require('../models/User.model');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 const loginUser = async (req, res) => {
     try{
@@ -14,7 +16,9 @@ const loginUser = async (req, res) => {
         if(!isPasswordValid){
             return res.status(401).json({message:"Username or password is incorrect"});
         }
-        res.status(200).json({message:"='Login Successful'"});
+        const token = jwt.sign({id: existingUser._id}, process.env.JWT_SECRET, {expiresIn: '7d'});
+        res.cookie('token', token, {httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000});
+        res.status(200).json({message:"Login Successful", token});
     }
     catch(error){
         console.error('Error during login:',error);

@@ -1,7 +1,9 @@
 const User = require('../models/User.model');
+const jwt = require('jsonwebtoken');
 const { sendRegistrationEmail } = require('../services/email.service');
+require('dotenv').config();
 
-registerUser = async (req, res) =>{
+const registerUser = async (req, res) =>{
     try{
         const {name, email, password} = req.body;
         const existingUser = await User.findOne({email});
@@ -12,7 +14,9 @@ registerUser = async (req, res) =>{
                 password
             });
             await newUser.save();
-            res.status(201).json({message: "User registered successfully"});
+            const token = jwt.sign({id: newUser._id}, process.env.JWT_SECRET, {expiresIn: '7d'});
+            res.cookie('token', token, {httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000});
+            res.status(201).json({message: "User registered successfully", token});
 
             await sendRegistrationEmail(email, name);
         }else{
