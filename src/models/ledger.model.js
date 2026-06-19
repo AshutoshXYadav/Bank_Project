@@ -24,11 +24,13 @@ const ledgerSchema = new mongoose.Schema({
         type: String,
         enum:{
             values:['debit','credit'],
-            message: 'Type must be either debit or credit'
+            message: 'Type must be either debit or credit',
+            required: [true, 'Type is required'],
+            immutable: true
+
         }
       },
-      required: [true, 'Type is required'],
-      immutable: true
+      
 }, { timestamps: true });
 function preventLedgerModification(){
     throw new Error('Ledger entries cannot be modified or deleted');

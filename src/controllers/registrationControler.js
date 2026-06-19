@@ -5,13 +5,14 @@ require('dotenv').config();
 
 const registerUser = async (req, res) =>{
     try{
-        const {name, email, password} = req.body;
+        const {name, email, password,system} = req.body;
         const existingUser = await User.findOne({email});
         if(!existingUser){
             const newUser = new User({
                 name,
                 email,
-                password
+                password,
+                system
             });
             await newUser.save();
             const token = jwt.sign({id: newUser._id}, process.env.JWT_SECRET, {expiresIn: '7d'});

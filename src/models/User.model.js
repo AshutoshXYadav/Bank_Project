@@ -20,8 +20,19 @@ const userSchema = new mongoose.Schema({
         required: [true, 'Password is required'],
         select: false,
         trim: true
-       
-
+    },
+    isSystemAdmin: {
+        type: Boolean,
+        default: false
+    },
+    system: {
+        type: Boolean,
+        default: false
+    },
+    status: {
+        type: String,
+        enum: ['active', 'inactive', 'suspended'],
+        default: 'active'
     }
 }, { timestamps: true });
 
