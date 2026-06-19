@@ -24,11 +24,10 @@ const ledgerSchema = new mongoose.Schema({
         type: String,
         enum:{
             values:['debit','credit'],
-            message: 'Type must be either debit or credit',
-            required: [true, 'Type is required'],
-            immutable: true
-
-        }
+            message: 'Type must be either debit or credit'
+        },
+        required: [true, 'Type is required'],
+        immutable: true
       },
       
 }, { timestamps: true });
@@ -39,9 +38,7 @@ ledgerSchema.pre('findOneAndUpdate', preventLedgerModification);
 ledgerSchema.pre('updateOne', preventLedgerModification);
 ledgerSchema.pre('deleteOne', preventLedgerModification);
 ledgerSchema.pre('findOneAndDelete', preventLedgerModification);
-ledgerSchema.pre('findOneAndRemove', preventLedgerModification);
 ledgerSchema.pre('deleteMany', preventLedgerModification);
-ledgerSchema.pre('remove', preventLedgerModification);
 ledgerSchema.pre('findOneAndReplace', preventLedgerModification);
 
 

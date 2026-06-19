@@ -1,6 +1,7 @@
 const User = require('../models/User.model');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+const blackListModel = require('../models/blackList.model');
 
 const loginUser = async (req, res) => {
     try{
@@ -26,4 +27,22 @@ const loginUser = async (req, res) => {
     }
 }
 
-module.exports = {loginUser};
+const logoutUser= async( req, res )=>{
+    const token = req.cookie.token || req.headers.authorisation;
+    if (!token){
+        res.body({
+            message: "Token not found !!"
+        })
+    }
+    res.cookie(token, "");
+  
+    await blackListModel.create({
+        token:{
+            token
+        }
+    })
+    return res.status(200).json({
+        message:"Account Logged Out Sucessfully"
+    })
+}
+module.exports = {loginUser, logoutUser};

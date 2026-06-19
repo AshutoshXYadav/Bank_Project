@@ -8,6 +8,8 @@ require('dotenv').config();
 router.post('/register', registrationController.registerUser);
 router.post('/login',loginController.loginUser);
 
+router.post('/logout', loginController.logoutUser);
+
 
 
 
